@@ -1,0 +1,43 @@
+---
+- name: Create NFVbench project
+  openstack.cloud.project:
+    state: present
+    cloud: "{{ cloud_detail }}"
+    name: "{{ project_name }}"
+    description: "{{ project_desc }}"
+    domain_id: "{{ project_domain_name }}"
+    enabled: True
+  register: project_info
+  when:
+    - admin
+    - tenant_creation
+
+- name: Extract project info
+  set_fact:
+    project_id: "{{ project_info.project.id }}"
+  when:
+    - admin
+    - project_info is defined
+
+- name: Create user
+  openstack.cloud.identity_user:
+    state: present
+    cloud: "{{ cloud_detail }}"
+    name: "{{ username }}"
+    password: "{{ password }}"
+    update_password: on_create
+    domain: "{{ user_domain }}"
+    default_project: "{{ project_name }}"
+  when:
+    - admin
+    - user_creation
+
+- name: Add user role to project
+  openstack.cloud.role_assignment:
+    cloud: "{{ cloud_detail }}"
+    user: "{{ username }}"
+    role: "{{ role }}"
+    project: "{{ project_name }}"
+  when:
+    - admin
+    - tenant_creation

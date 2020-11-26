@@ -1,0 +1,187 @@
+---
+# flags to disable steps
+deploy: true
+run_test: true
+cleanup: true
+admin: true
+tenant_creation: true
+user_creation: true
+dump_results: true
+
+dump_path: /tmp/
+
+cloud_detail: "nfvbench"
+project_name: nfvbench
+project_desc:
+project_domain_name: default
+
+username: nfvbench
+password: Nfvbench-P@$$w0rd1
+user_domain: Default
+role: _member_
+
+openrc_file_name: openrc
+user_openrc_exists: false
+cacert_file_name: ca.pem
+generator_scenario: e2e
+test_case: characterization
+
+flavors:
+  - flavor_name: flavor_nfvbench_sriov
+    flavor_ram: 16384
+    flavor_vcpus: 9
+    flavor_disk: 24
+    flavor_extra_specs:
+        hw:numa_nodes: 1
+        hw:cpu_policy: dedicated
+        hw:cpu_thread_policy: isolate
+        hw:emulator_threads_policy: share
+        hw:mem_page_size: large
+  - flavor_name: flavor_nfvbench_dpdk
+    flavor_ram: 16384
+    flavor_vcpus: 9
+    flavor_disk: 24
+    flavor_extra_specs:
+        hw:numa_nodes: 1
+        hw:cpu_policy: dedicated
+        hw:emulator_threads_policy: share
+        hw:mem_page_size: large
+
+router_name: router_nfvbench
+external_network_name: external
+security_group_name:
+
+management_networks:
+  - network_name: nfvbexternal_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id:
+    external: no
+    shared: yes
+    cleanup: true
+
+    subnet_name: subnet_nfvbenchexternal_vn1
+    gateway: 192.168.90.1
+    cidr: 192.168.90.0/24
+    enable_dhcp: no
+    no_gateway_ip: no
+
+    port_name: nfvbench_mgmt_port
+    vnic_type: normal
+    security_groups: []
+    port_security: no
+
+generator_networks: 
+  - network_name: net_nfvbench_vn1
+    physical_network: data2
+    network_type: vlan
+    segmentation_id:
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf1
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+
+  - network_name: net_nfvbench_vn1bis
+    physical_network: data3
+    network_type: vlan
+    segmentation_id: 
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback
+
+    subnet_name: subnet_nfvbench_vn1bis
+    gateway:
+    cidr: 192.168.92.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf1bis
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+  - network_name: net_nfvbench_vn2
+    physical_network: data3
+    network_type: vlan
+    segmentation_id: 
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+
+    subnet_name: subnet_nfvbench_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf2
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+loop_vm_networks: "{{ generator_networks }}"
+
+
+images_path: './images/'
+loop_vm_image_name: 'nfvbenchvm-0.13'
+loop_vm_image_filename: nfvbenchvm-0.13.qcow2
+generator_image_name: 'nfvbenchvm-generator-0.14'
+generator_image_filename: nfvbenchvm-generator-0.14.qcow2
+floating_ip_timeout: 180
+generator_vm:
+  - server_name: nfvbench_test_auto_deploy
+    flavor_name: flavor_nfvbench_sriov
+    image_name: '{{ generator_image_name }}'
+    zone_name:
+    security_groups: []
+    keypair_name: nfvbkey
+
+
+nfvbench_config:
+  traffic_generator:
+    # IP addresses of the generated traffic
+    ip_addrs: ['198.18.0.0/16', '198.19.0.0/16']
+    tg_gateway_ip_addrs: ['192.168.91.1', '192.168.92.2']
+    # First router interco IP addresses
+    gateway_ip_addrs: ['192.168.91.2', '192.168.92.2']
+    generator_profile:
+      - name: trex-local
+        tool: TRex
+        ip: 127.0.0.1
+        zmq_pub_port: 4500
+        zmq_rpc_port: 4501
+        software_mode: false
+  user_label:
+  service_chain: PVP
+  vm_forwarder: 'vpp'
+  num_mbufs: 128000
+  service_chain_shared_net: 'true'
+  vlan_tagging: 'false'
+  vm_image_file: '[[ loop_vm_image_filename ]]'
+  loop_vm_name: nfvbench-loop-vm
+  availability_zone: 'nova'
+  hypervisor_hostname: 'localdomain'
+  no_cleanup: true
+  flavor_type: 'flavor_nfvbench_dpdk'
+  fluentd:
+    logging_tag:
+    result_tag:
+    ip:
+    port:

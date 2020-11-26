@@ -1,0 +1,16 @@
+---
+- name: Create Router {{ router_name }}
+  openstack.cloud.router:
+    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
+    state: present
+    name: "{{ router_name }}"
+    network: "{{ external_network_name }}"
+    interfaces:
+      - "{{ item.subnet_name }}"
+    validate_certs: null
+  with_items:
+    - "{{ management_networks }}"
+  when:
+    - item.topology is not defined
+  register: router
+

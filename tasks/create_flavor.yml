@@ -1,0 +1,12 @@
+---
+- name: Create flavor {{ item.flavor_name }}
+  openstack.cloud.compute_flavor:
+    cloud: "{{ cloud_detail }}"
+    state: present
+    name: "{{ item.flavor_name }}"
+    ram: "{{ item.flavor_ram }}"
+    vcpus: "{{ item.flavor_vcpus }}"
+    disk: "{{ item.flavor_disk }}"
+    extra_specs:
+      "{{ item.flavor_extra_specs }}"
+  when: admin
