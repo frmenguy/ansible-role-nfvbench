@@ -1,3 +1,4 @@
+---
 - name: Verify if generator image {{ generator_image_name }} exists on openstack
   openstack.cloud.image_info:
     cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"

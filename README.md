@@ -1,6 +1,6 @@
-# Ansible role: ansible-role-nfvbench
+# Ansible role: nfvbench
 
-This repo hosts the `ansible-role-nfvbench` Ansible role.
+This repo hosts the `nfvbench` Ansible role.
 
 This role aims to deploy [NFVbench](https://github.com/opnfv/nfvbench) tool inside an SR-IOV VM on a Openstack platform.
 The role includes tasks using the `openstack.cloud` Ansible Collection.
@@ -41,7 +41,7 @@ Before using this ansible role you need to install the Openstack Cloud collectio
 
 Before using this ansible role you need to install the Openstack Cloud collection with the `ansible-galaxy` CLI:
 
-`ansible-galaxy install ansible-role-nfvbench`
+`ansible-galaxy install frmenguy.nfvbench`
 
 
 ### Playbooks
@@ -52,7 +52,7 @@ To use this role, please reference the full name of Ansible role, collection nam
 ---
 - hosts: localhost
   roles:
-    - role: ansible-role-nfvbench
+    - role: frmenguy.nfvbench
 
 ```
 

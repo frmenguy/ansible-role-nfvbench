@@ -13,4 +13,3 @@
   when:
     - item.topology is not defined
   register: router
-

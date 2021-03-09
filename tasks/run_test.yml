@@ -1,3 +1,4 @@
+---
 - name: Override nfvbench configuration
   copy:
     src: e2e.cfg
@@ -28,15 +29,15 @@
     - name: Run Xtesting NFVbench scenario
       command: run_tests -t {{ test_case }} -p -r
       environment:
-        S3_ENDPOINT_URL:  "{{ lookup('env', 'S3_ENDPOINT_URL') }}"
-        S3_DST_URL:  "{{ lookup('env', 'S3_DST_URL') }}"
-        HTTP_DST_URL:  "{{ lookup('env', 'HTTP_DST_URL') }}"
-        AWS_ACCESS_KEY_ID:  "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-        AWS_SECRET_ACCESS_KEY:  "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-        TEST_DB_URL:  "{{ lookup('env', 'TEST_DB_URL') }}"
-        TEST_DB_EXT_URL:  "{{ lookup('env', 'TEST_DB_EXT_URL') }}"
-        NODE_NAME:  "{{ lookup('env', 'NODE_NAME') }}"
-        BUILD_TAG:  "{{ lookup('env', 'BUILD_TAG') }}"
+        S3_ENDPOINT_URL: "{{ lookup('env', 'S3_ENDPOINT_URL') }}"
+        S3_DST_URL: "{{ lookup('env', 'S3_DST_URL') }}"
+        HTTP_DST_URL: "{{ lookup('env', 'HTTP_DST_URL') }}"
+        AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+        TEST_DB_URL: "{{ lookup('env', 'TEST_DB_URL') }}"
+        TEST_DB_EXT_URL: "{{ lookup('env', 'TEST_DB_EXT_URL') }}"
+        NODE_NAME: "{{ lookup('env', 'NODE_NAME') }}"
+        BUILD_TAG: "{{ lookup('env', 'BUILD_TAG') }}"
       register: result
       failed_when:
         - "'Traceback' in result.stdout or 'TrafficClientException' in result.stdout or 'Result.EX_ERROR' in result.stdout"
@@ -66,4 +67,3 @@
       no_log: true
       when:
         - dump_results
-

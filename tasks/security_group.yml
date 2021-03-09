@@ -1,3 +1,4 @@
+---
 - name: Create nfvbench security group {{ security_group_name }}
   openstack.cloud.security_group:
     cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
@@ -37,4 +38,3 @@
     port_range_max: 65535
     remote_ip_prefix: 0.0.0.0/0
     validate_certs: null
-

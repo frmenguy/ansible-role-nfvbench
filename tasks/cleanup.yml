@@ -72,11 +72,11 @@
 
 - name: Delete the subnet
   openstack.cloud.subnet:
-   state: absent
-   cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
-   name: "{{ item.subnet_name }}"
-   network_name: "{{ item.network_name }}"
-   validate_certs: null
+    state: absent
+    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
+    name: "{{ item.subnet_name }}"
+    network_name: "{{ item.network_name }}"
+    validate_certs: null
   with_items:
     - "{{ generator_networks }}"
     - "{{ loop_vm_networks }}"

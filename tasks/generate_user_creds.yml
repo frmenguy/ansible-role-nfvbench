@@ -1,3 +1,4 @@
+---
 - name: Extract clouds.yaml vars
   set_fact:
     cloud_data: "{{ lookup('file', 'clouds.yaml') | from_yaml  }}"

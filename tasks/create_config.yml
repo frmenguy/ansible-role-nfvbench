@@ -17,8 +17,8 @@
   template:
     src: nfvbench.cfg.j2
     dest: "{{ file_name }}"
-    variable_start_string : '[['
-    variable_end_string : ']]'
+    variable_start_string: '[['
+    variable_end_string: ']]'
     mode: '0644'
 
 - name: Set default value for internal_networks variable
@@ -43,6 +43,6 @@
   template:
     src: nfvbench.cfg.j2
     dest: "{{ file_name }}"
-    variable_start_string : '[['
-    variable_end_string : ']]'
+    variable_start_string: '[['
+    variable_end_string: ']]'
     mode: '0644'

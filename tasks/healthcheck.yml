@@ -71,13 +71,13 @@
 
 - name: health check NFVbench is running
   uri:
-      url: "http://{{ nfvbench_vm_ip }}:7555/version"
-      method: GET
-      return_content: yes
+    url: "http://{{ nfvbench_vm_ip }}:7555/version"
+    method: GET
+    return_content: yes
   register: _result
   until: _result.status == 200
-  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
-  delay: 5 # Every 5 seconds
+  retries: 720  # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5  # Every 5 seconds
 - name: NFVbench running version
   debug:
     msg: "{{ _result.content }}"

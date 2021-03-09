@@ -1,27 +1,26 @@
 ---
 - name: Get the subnet info for {{ item.subnet_name }}
   openstack.cloud.subnets_info:
-   cloud: "{{ cloud_detail }}"
-   name: "{{ item.subnet_name }}"
+    cloud: "{{ cloud_detail }}"
+    name: "{{ item.subnet_name }}"
   register: subnet_info
 
 - name: Register subnet id
   set_fact:
     subnet_ids: "{{ subnet_ids | default({}) | combine( { item.network_name: subnet_info.openstack_subnets[0].id } ) }}"
-  when:
-    - subnet_info.openstack_subnets | length > 0
+  when: subnet_info.openstack_subnets | length > 0
 
 - name: Create the subnet {{ item.subnet_name }}
   openstack.cloud.subnet:
-   state: present
-   cloud: "{{ cloud_detail }}"
-   name: "{{ item.subnet_name }}"
-   network_name: "{{ item.network_name }}"
-   gateway_ip: "{{ item.gateway }}"
-   project: "{{ project_id }}"
-   cidr: "{{ item.cidr }}"
-   enable_dhcp: "{{ item.enable_dhcp }}"
-   no_gateway_ip: "{{ item.no_gateway_ip }}"
+    state: present
+    cloud: "{{ cloud_detail }}"
+    name: "{{ item.subnet_name }}"
+    network_name: "{{ item.network_name }}"
+    gateway_ip: "{{ item.gateway }}"
+    project: "{{ project_id }}"
+    cidr: "{{ item.cidr }}"
+    enable_dhcp: "{{ item.enable_dhcp }}"
+    no_gateway_ip: "{{ item.no_gateway_ip }}"
   when:
     - admin
     - subnet_info.openstack_subnets | length == 0
@@ -29,8 +28,8 @@
 # Get info after creation to save subnet id
 - name: Get the subnet info for {{ item.subnet_name }}
   openstack.cloud.subnets_info:
-   cloud: "{{ cloud_detail }}"
-   name: "{{ item.subnet_name }}"
+    cloud: "{{ cloud_detail }}"
+    name: "{{ item.subnet_name }}"
   register: subnet_info
   when:
     - subnet is changed
@@ -38,5 +37,4 @@
 - name: Register subnet id
   set_fact:
     subnet_ids: "{{ subnet_ids | default({}) | combine( { item.network_name: subnet_info.openstack_subnets[0].id } ) }}"
-  when:
-    - subnet is changed
+  when: subnet is changed
