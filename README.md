@@ -56,12 +56,402 @@ To use this role, please reference the full name of Ansible role, collection nam
 
 ```
 
+## Examples of nfvbench ansible role configuration
 
+Default configuration is available in `defaults/main.yml` file in nfvbench ansible role sources.
 
+This configuration can be overridden by replacing this file or using Ansible `extra_vars`.
 
+`Note: Please find network design options details here :` [NFVbench network design options](docs/nfvbenchvm-network-design.md)
 
+#### NFVbench network design - option 1: Physical Function, 3 physnets
 
+See below the parameters modified for this network design:
+
+```
+---
+# ... see default file to have other parameters
+
+management_networks:
+  - network_name: nfvbexternal_vn1
+    external: no
+    shared: yes
+    cleanup: true
+
+    subnet_name: subnet_nfvbenchexternal_vn1
+    gateway: 192.168.90.1
+    cidr: 192.168.90.0/24
+    enable_dhcp: no
+    no_gateway_ip: no
+
+    port_name: nfvbench_mgmt_port
+    vnic_type: normal
+    security_groups: []
+    port_security: no
+
+generator_networks:
+  - network_name: net_nfvbench_vn1
+    physical_network: data2
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+    
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_pf1
+    vnic_type: direct-physical
+    security_groups: []
+    port_security: no
+
+  - network_name: net_nfvbench_vn2
+    physical_network: data3
+    network_type: vlan
+    segmentation_id: 2519
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+    
+    subnet_name: subnet_nfvbench_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_pf2
+    vnic_type: direct-physical
+    security_groups: []
+    port_security: no
+
+loop_vm_networks:
+  - network_name: net_nfvbench_loop_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id:
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_loop_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+  - network_name: net_nfvbench_loop_vn2
+    physical_network: data1
+    network_type: vlan
+    segmentation_id:
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_loop_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
 
 ```
 
+#### NFVbench network design - option 2: Physical Function, 1 physnet
+
+See below the parameters modified for this network design:
+
+```
+---
+# ... see default file to have other parameters
+
+management_networks:
+  - network_name: nfvbexternal_vn1
+    external: no
+    shared: yes
+    cleanup: true
+
+    subnet_name: subnet_nfvbenchexternal_vn1
+    gateway: 192.168.90.1
+    cidr: 192.168.90.0/24
+    enable_dhcp: no
+    no_gateway_ip: no
+
+    port_name: nfvbench_mgmt_port
+    vnic_type: normal
+    security_groups: []
+    port_security: no
+
+generator_networks:
+  - network_name: net_nfvbench_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+    
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_pf1
+    vnic_type: direct-physical
+    security_groups: []
+    port_security: no
+
+
+  - network_name: net_nfvbench_vn2
+    physical_network: data1
+    network_type: vlan
+    segmentation_id: 2519
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+
+    subnet_name: subnet_nfvbench_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_pf2
+    vnic_type: direct-physical
+    security_groups: []
+    port_security: no
+
+loop_vm_networks: {{ generator_networks }}
+```
+
+#### NFVbench network design - option 3: Virtual Function, 3 physnets
+
+See below the parameters modified for this network design:
+
+```
+---
+# ... see default file to have other parameters
+
+management_networks:
+  - network_name: nfvbexternal_vn1
+    external: no
+    shared: yes
+    cleanup: true
+
+    subnet_name: subnet_nfvbenchexternal_vn1
+    gateway: 192.168.90.1
+    cidr: 192.168.90.0/24
+    enable_dhcp: no
+    no_gateway_ip: no
+
+    port_name: nfvbench_mgmt_port
+    vnic_type: normal
+    security_groups: []
+    port_security: no
+
+generator_networks:
+  - network_name: net_nfvbench_vn1
+    physical_network: data2
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback_e2e
+    
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf1
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+
+  - network_name: net_nfvbench_vn1bis
+    physical_network: data3
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback
+    
+    subnet_name: subnet_nfvbench_vn1bis
+    gateway:
+    cidr: 192.168.92.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf1bis
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+  - network_name: net_nfvbench_vn2
+    physical_network: data3
+    network_type: vlan
+    segmentation_id: 2519
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf2
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+loop_vm_networks:
+  - network_name: net_nfvbench_loop_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id:
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_loop_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+  - network_name: net_nfvbench_loop_vn2
+    physical_network: data1
+    network_type: vlan
+    segmentation_id:
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_loop_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+```
+
+#### NFVbench network design - option 4: Virtual Function, 3 physnet
+
+See below the parameters modified for this network design:
+
+```
+---
+# ... see default file to have other parameters
+management_networks:
+  - network_name: nfvbexternal_vn1
+    external: no
+    shared: yes
+    cleanup: true
+
+    subnet_name: subnet_nfvbenchexternal_vn1
+    gateway: 192.168.90.1
+    cidr: 192.168.90.0/24
+    enable_dhcp: no
+    no_gateway_ip: no
+
+    port_name: nfvbench_mgmt_port
+    vnic_type: normal
+    security_groups: []
+    port_security: no
+
+generator_networks:
+  - network_name: net_nfvbench_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+    
+    topology: loopback_e2e
+
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf1
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+   - network_name: net_nfvbench_vn1
+    physical_network: data1
+    network_type: vlan
+    segmentation_id: 2518
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: loopback
+    
+    subnet_name: subnet_nfvbench_vn1
+    gateway:
+    cidr: 192.168.91.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf3
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+  - network_name: net_nfvbench_vn2
+    physical_network: data1
+    network_type: vlan
+    segmentation_id: 2519
+    external: yes
+    shared: yes
+    cleanup: true
+
+    topology: e2e
+    
+    subnet_name: subnet_nfvbench_vn2
+    gateway:
+    cidr: 192.168.93.0/24
+    enable_dhcp: no
+    no_gateway_ip: yes
+
+    port_name: nfvbench_port_vf2
+    vnic_type: direct
+    security_groups: []
+    port_security: no
+
+loop_vm_networks: {{ generator_networks }}
+```
 
