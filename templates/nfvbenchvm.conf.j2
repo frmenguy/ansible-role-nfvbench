@@ -16,3 +16,6 @@ INTF_MGMT_IP_GW={{ mgmt_ipgw }}
 INTF_MAC_MGMT={{ mgmt_port.mac_address }}
 {% endif %}
 ACTION={{ generator_scenario }}
+{% if dns_servers is defined %}
+DNS_SERVERS={{ dns_servers }}
+{% endif %}

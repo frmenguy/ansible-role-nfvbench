@@ -20,7 +20,7 @@ export OS_PASSWORD={{ OS_PASSWORD }}
 export OS_REGION_NAME={{ OS_REGION_NAME }}
 {% endif %}
 {% if cacert_file_name is defined %}
-export OS_CACERT={{ OS_CACERT }}
+export OS_CACERT=/etc/nfvbench/cacert.pem
 {% endif %}
 # Don't leave a blank variable, unset it if it was empty
 if [ -z "\$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi

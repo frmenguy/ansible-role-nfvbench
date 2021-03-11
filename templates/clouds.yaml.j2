@@ -5,8 +5,8 @@ auth:
   project_name: {{ OS_PROJECT_NAME }}
   project_domain_name: {{ OS_PROJECT_DOMAIN_NAME }}
   user_domain_name: {{ OS_USER_DOMAIN_NAME }}
-{% if OS_CA_CERT is defined %}
-cacert: {{ OS_CA_CERT }}
+{% if OS_CACERT is defined %}
+cacert: {{ OS_CACERT }}
 {% endif %}
 identity_api_version: "3"
 region_name: {{ OS_REGION_NAME }}

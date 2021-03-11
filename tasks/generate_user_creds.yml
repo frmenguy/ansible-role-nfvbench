@@ -47,7 +47,7 @@
     OS_PASSWORD: "{{ password }}"
     OS_REGION_NAME: "{{ cloud_data.clouds[cloud_detail].region_name }}"
     OS_PROJECT_DOMAIN_NAME: "{{ cloud_data.clouds[cloud_detail].auth.project_domain_name }}"
-    OS_CACERT: /etc/nfvbench/cacert.pem
+    OS_CACERT: "{{ cloud_data.clouds[cloud_detail].cacert }}"
 
 - name: Create openrc file for the user
   template:
