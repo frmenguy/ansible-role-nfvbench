@@ -11,6 +11,7 @@
       include_vars: "{{ lookup('env', 'extra_vars') }}"
       when:
         - extra_vars.stat.exists
+      no_log: true
     - name: Check user is admin
       openstack.cloud.identity_user_info:
         cloud: "{{ cloud_detail }}"

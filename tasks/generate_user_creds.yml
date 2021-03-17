@@ -2,12 +2,15 @@
 - name: Extract clouds.yaml vars
   set_fact:
     cloud_data: "{{ lookup('file', 'clouds.yaml') | from_yaml  }}"
+  no_log: true
 
-- name: Check if openrc file is provided for requested user
+- name: Check if openrc file exists
   stat:
     path: "{{ openrc_file_name }}"
   register: openrc_result
-- name: Check if openrc file is provided for requested user
+  no_log: true
+
+- name: Check if requested user is specify in openrc file
   set_fact:
     user_openrc_exists: "{{ username == lookup('file', openrc_file_name) | regex_search('(?<=OS_USERNAME=).*', multiline=True) | trim  }}"
   when:
@@ -48,6 +51,7 @@
     OS_REGION_NAME: "{{ cloud_data.clouds[cloud_detail].region_name }}"
     OS_PROJECT_DOMAIN_NAME: "{{ cloud_data.clouds[cloud_detail].auth.project_domain_name }}"
     OS_CACERT: "{{ cloud_data.clouds[cloud_detail].cacert }}"
+  no_log: true
 
 - name: Create openrc file for the user
   template:
@@ -55,9 +59,11 @@
     dest: '{{ openrc_file_name }}'
     mode: '0644'
   when: not user_openrc_exists
+  no_log: true
 
 - name: Create clouds.yaml file for the new user
   template:
     src: clouds.yaml.j2
     dest: clouds-user.yaml
     mode: '0644'
+  no_log: true
