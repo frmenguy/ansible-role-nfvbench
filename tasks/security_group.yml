@@ -5,7 +5,7 @@
     state: present
     name: "{{ security_group_name }}"
     description: Security group for nfvbench
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: security_group
 
 - name: Create security group rule for ping
@@ -15,7 +15,7 @@
     security_group: "{{ security_group.id }}"
     protocol: icmp
     remote_ip_prefix: 0.0.0.0/0
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
 
 - name: Create security group rule for SSH
   openstack.cloud.security_group_rule:
@@ -26,7 +26,7 @@
     port_range_min: 22
     port_range_max: 22
     remote_ip_prefix: 0.0.0.0/0
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
 
 - name: Create security group rule for TCP
   openstack.cloud.security_group_rule:
@@ -37,4 +37,4 @@
     port_range_min: 1
     port_range_max: 65535
     remote_ip_prefix: 0.0.0.0/0
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"

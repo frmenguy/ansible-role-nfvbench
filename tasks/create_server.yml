@@ -39,7 +39,7 @@
     cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
     state: present
     name: "{{ generator_vm[0].keypair_name }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: keypair
   when:
     - generator_vm[0].keypair_name is defined
@@ -78,7 +78,7 @@
           echo "{% endraw -%}{{ lookup('file', openrc_file_name) }}{%- raw -%}" >> /etc/nfvbench/openrc
           /etc/rc.local
       {% endraw %}
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: nfvbench_vm
 
 - name: Attach floating ip from external network
@@ -91,7 +91,7 @@
     reuse: true
     wait: true
     timeout: "{{ floating_ip_timeout | int }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: floating_ip
   ignore_errors: true
   when:

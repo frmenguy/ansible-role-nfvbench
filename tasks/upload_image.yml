@@ -3,7 +3,7 @@
   openstack.cloud.image_info:
     cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
     image: "{{ generator_image_name }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: image
   when:
     - generator_image_name != None
@@ -15,7 +15,7 @@
     container_format: bare
     disk_format: qcow2
     state: present
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
     filename: "{{ images_path + generator_image_filename }}"
   when:
     - generator_image_filename != None
@@ -25,7 +25,7 @@
   openstack.cloud.image_info:
     cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
     image: "{{ loop_vm_image_name }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: loopvm_image
   when:
     - loop_vm_image_name != None
@@ -38,7 +38,7 @@
     disk_format: qcow2
     state: present
     filename: "{{ images_path + loop_vm_image_filename }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   when:
     - loop_vm_image_filename != None
     - not loopvm_image.openstack_image

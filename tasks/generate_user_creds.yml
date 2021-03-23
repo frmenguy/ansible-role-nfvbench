@@ -45,12 +45,16 @@
     OS_AUTH_URL: "{{ cloud_data.clouds[cloud_detail].auth.auth_url }}"
     OS_PROJECT_ID: "{{ project_id }}"
     OS_PROJECT_NAME: "{{ project_name }}"
-    OS_USER_DOMAIN_NAME: "{{ cloud_data.clouds[cloud_detail].auth.user_domain_name }}"
+    OS_USER_DOMAIN_NAME: "{{ user_domain_name }}"
     OS_USERNAME: "{{ username }}"
     OS_PASSWORD: "{{ password }}"
     OS_REGION_NAME: "{{ cloud_data.clouds[cloud_detail].region_name }}"
-    OS_PROJECT_DOMAIN_NAME: "{{ cloud_data.clouds[cloud_detail].auth.project_domain_name }}"
+    OS_PROJECT_DOMAIN_NAME: "{{ project_domain_name }}"
+  no_log: true
+- name: Set CACERT env variable
+  set_fact:
     OS_CACERT: "{{ cloud_data.clouds[cloud_detail].cacert }}"
+  ignore_errors: true
   no_log: true
 
 - name: Create openrc file for the user

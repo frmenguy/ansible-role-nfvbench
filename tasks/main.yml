@@ -15,6 +15,7 @@
     - name: Check user is admin
       openstack.cloud.identity_user_info:
         cloud: "{{ cloud_detail }}"
+        validate_certs: "{{ validate_certs }}"
       register: user_info
       ignore_errors: true
       no_log: true

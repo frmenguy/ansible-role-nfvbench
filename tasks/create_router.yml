@@ -7,7 +7,7 @@
     network: "{{ external_network_name }}"
     interfaces:
       - "{{ item.subnet_name }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   with_items:
     - "{{ management_networks }}"
   when:

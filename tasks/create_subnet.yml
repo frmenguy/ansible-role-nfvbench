@@ -3,6 +3,7 @@
   openstack.cloud.subnets_info:
     cloud: "{{ cloud_detail }}"
     name: "{{ item.subnet_name }}"
+    validate_certs: "{{ validate_certs }}"
   register: subnet_info
 
 - name: Register subnet id

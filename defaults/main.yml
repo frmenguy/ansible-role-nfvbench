@@ -8,6 +8,8 @@ tenant_creation: true
 user_creation: true
 dump_results: true
 
+validate_certs: null
+
 dump_path: /tmp/
 
 cloud_detail: "nfvbench"
@@ -16,8 +18,8 @@ project_desc:
 project_domain_name: default
 
 username: nfvbench
-password: Nfvbench-P@$$w0rd1
-user_domain: Default
+password: Nfvbench-P@ssw0rd1
+user_domain_name: Default
 role: _member_
 
 openrc_file_name: openrc
@@ -146,7 +148,7 @@ generator_image_name: 'nfvbenchvm-generator-0.14'
 generator_image_filename: nfvbenchvm-generator-0.14.qcow2
 floating_ip_timeout: 180
 generator_vm:
-  - server_name: nfvbench_test_auto_deploy
+  - server_name: nfvbench_generator
     flavor_name: flavor_nfvbench_sriov
     image_name: '{{ generator_image_name }}'
     zone_name:

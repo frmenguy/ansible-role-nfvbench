@@ -10,7 +10,7 @@
     port_security_enabled: "{{ item.port_security }}"
     fixed_ips:
       - subnet_id: "{{ subnet_ids[item.network_name] }}"
-    validate_certs: null
+    validate_certs: "{{ validate_certs }}"
   register: port
 
 - name: Add {{ item.port_name }} port name to server ports list
