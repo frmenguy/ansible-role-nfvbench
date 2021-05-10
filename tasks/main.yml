@@ -62,22 +62,36 @@
       when:
         - deploy | bool
         - loop_vm_networks is defined
+    - name: filter e2e generator networks
+      set_fact:
+        generator_networks_e2e: "{{ generator_networks_e2e | default([]) + [item] }}"
+      with_items: "{{ generator_networks }}"
+      when:
+        - deploy | bool
+        - item.topology is defined
+        - item.topology == 'e2e' or item.topology == 'loopback_e2e'
     - include_tasks: create_generator_network.yml
       with_together:
-        - "{{ generator_networks }}"
+        - "{{ generator_networks_e2e }}"
         - "{{ e2e_vlans }}"
       when:
         - deploy | bool
-        - item.0.topology is defined
-        - item.0.topology == 'e2e' or item.0.topology == 'loopback_e2e'
+        - generator_networks_e2e is defined
+    - name: filter loopback generator networks
+      set_fact:
+        generator_networks_loopback: "{{ generator_networks_loopback | default([]) + [item] }}"
+      with_items: "{{ generator_networks }}"
+      when:
+        - deploy | bool
+        - item.topology is defined
+        - item.topology == 'loopback'
     - include_tasks: create_generator_network.yml
       with_together:
-        - "{{ generator_networks }}"
+        - "{{ generator_networks_loopback }}"
         - "{{ loopback_vlans }}"
       when:
         - deploy | bool
-        - item.0.topology is defined
-        - item.0.topology == 'loopback'
+        - generator_networks_loopback is defined
     - include_tasks: create_subnet.yml
       with_items: "{{ generator_networks }}"
       when: deploy | bool

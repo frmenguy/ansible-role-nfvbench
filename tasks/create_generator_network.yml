@@ -9,6 +9,7 @@
     shared: "{{ item.0.shared }}"
   when:
     - admin
+    - item.0.network_name is defined
     - item.0.physical_network is not defined
 
 - name: Create the provider network for generator
@@ -24,4 +25,5 @@
     shared: "{{ item.0.shared }}"
   when:
     - admin
+    - item.0.network_name is defined
     - item.0.physical_network is defined

@@ -1,5 +1,5 @@
 ---
-# flags to disable steps
+# flags to enable/disable steps
 deploy: true
 run_test: true
 cleanup: true
@@ -9,25 +9,46 @@ user_creation: true
 dump_results: true
 
 validate_certs: null
+floating_ip_timeout: 180
 
+# Path for NFVbench results dump (step done if dump_results: true)
 dump_path: /tmp/
 
+# name of clouds.yaml ressource to use
 cloud_detail: "nfvbench"
+
+# Tenant information for creation or reuse
 project_name: nfvbench
 project_desc:
 project_domain_name: default
-
 username: nfvbench
 password: Nfvbench-P@ssw0rd1
 user_domain_name: Default
+# If user is created set accurate rights to use ('_member_' or 'admin')
 role: _member_
 
+# Reuse user pre-existing openrc file or define a new one for NFVbench generator VM (used by NFVbench application)
 openrc_file_name: openrc
 user_openrc_exists: false
+
+# NFVbench generator VM Openstack certificate
 cacert_file_name: ca.pem
+
+# Openstack images to upload or reuse for NFVbench generator and loop VM
+# Images location
+images_path: './images/'
+# Images details
+loop_vm_image_name: 'nfvbenchvm-0.13'
+loop_vm_image_filename: nfvbenchvm-0.13.qcow2
+generator_image_name: 'nfvbenchvm-generator-0.14'
+generator_image_filename: nfvbenchvm-generator-0.14.qcow2
+
+# NFVbench scenario (e2e or loopback)
 generator_scenario: e2e
+# NFVbench test case (characterization, non-regression). See NFVbench source code (xtesting/testcases.yaml) for more information.
 test_case: characterization
 
+# NFVbench flavors for generator VM or loop VM (list is not exhaustive, add flavor(s) depending on compute nodes to test)
 flavors:
   - flavor_name: flavor_nfvbench_sriov
     flavor_ram: 16384
@@ -49,17 +70,21 @@ flavors:
       hw:emulator_threads_policy: share
       hw:mem_page_size: large
 
+# Router name to create or reuse for management connectivity between external network and management network
 router_name: router_nfvbench
 external_network_name: external
 security_group_name:
 
+# Management network used by generator VM (and loop VM)
 management_networks:
   - network_name: nfvbexternal_vn1
     physical_network: data1
     network_type: vlan
     segmentation_id:
     external: no
+    # must be set to yes, otherwise management network usage will failed
     shared: yes
+    # if ressource is shared with other projects or created previously by an admin, set cleanup to false
     cleanup: true
 
     subnet_name: subnet_nfvbenchexternal_vn1
@@ -73,6 +98,11 @@ management_networks:
     security_groups: []
     port_security: no
 
+# Generator networks (2 or 3 depending on network design choosen)
+# topology values:
+# - loopback_e2e (port is used for loopback and e2e (PVP NFVbench use case) tests)
+# - loopback (port only used for loopback test traffic)
+# - e2e (port only used for e2e (PVP NFVbench use case) test traffic)
 generator_networks:
   - network_name: net_nfvbench_vn1
     physical_network: data2
@@ -80,6 +110,7 @@ generator_networks:
     segmentation_id:
     external: yes
     shared: yes
+    # if ressource is shared with other projects or created previously by an admin, set cleanup to false
     cleanup: true
 
     topology: loopback_e2e
@@ -102,6 +133,7 @@ generator_networks:
     segmentation_id:
     external: yes
     shared: yes
+    # if ressource is shared with other projects or created previously by an admin, set cleanup to false
     cleanup: true
 
     topology: loopback
@@ -123,6 +155,7 @@ generator_networks:
     segmentation_id:
     external: yes
     shared: yes
+    # if ressource is shared with other projects or created previously by an admin, set cleanup to false
     cleanup: true
 
     topology: e2e
@@ -138,24 +171,23 @@ generator_networks:
     security_groups: []
     port_security: no
 
+# Loop VM networks
+# Loop VM can used same networks as generator (if topology has a value of loopback_e2e or e2e)
+# or loop VM can used other networks than generator (i.e. not shared networks)
+# In this case set accurate list of networks using same frame as generator_networks
 loop_vm_networks: "{{ generator_networks }}"
 
-
-images_path: './images/'
-loop_vm_image_name: 'nfvbenchvm-0.13'
-loop_vm_image_filename: nfvbenchvm-0.13.qcow2
-generator_image_name: 'nfvbenchvm-generator-0.14'
-generator_image_filename: nfvbenchvm-generator-0.14.qcow2
-floating_ip_timeout: 180
+# NFVbench generator VM information
 generator_vm:
   - server_name: nfvbench_generator
     flavor_name: flavor_nfvbench_sriov
     image_name: '{{ generator_image_name }}'
     zone_name:
     security_groups: []
+    # create new key pair or reuse one if existing (private key must be present in ansible path)
     keypair_name: nfvbkey
 
-
+# NFVbench config part, override NFVbench default configuration (see NFVbench code for more information)
 nfvbench_config:
   traffic_generator:
     # IP addresses of the generated traffic

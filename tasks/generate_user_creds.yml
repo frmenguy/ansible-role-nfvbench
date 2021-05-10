@@ -62,7 +62,7 @@
     src: openrc.j2
     dest: '{{ openrc_file_name }}'
     mode: '0644'
-  when: not user_openrc_exists
+  when: not user_openrc_exists or project_id changed
   no_log: true
 
 - name: Create clouds.yaml file for the new user
