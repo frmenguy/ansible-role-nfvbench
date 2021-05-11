@@ -7,6 +7,7 @@
     project: "{{ project_id }}"
     external: "{{ item.external }}"
     shared: "{{ item.shared }}"
+    validate_certs: "{{ validate_certs }}"
   when:
     - item.physical_network is not defined
 
@@ -21,6 +22,7 @@
     provider_segmentation_id: "{{ item.segmentation_id | default(omit) | int }}"
     external: "{{ item.external }}"
     shared: "{{ item.shared }}"
+    validate_certs: "{{ validate_certs }}"
   when:
     - admin
     - item.physical_network is defined

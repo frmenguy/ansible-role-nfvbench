@@ -22,6 +22,7 @@
     cidr: "{{ item.cidr }}"
     enable_dhcp: "{{ item.enable_dhcp }}"
     no_gateway_ip: "{{ item.no_gateway_ip }}"
+    validate_certs: "{{ validate_certs }}"
   when:
     - subnet_info.openstack_subnets | length == 0
   register: subnet
