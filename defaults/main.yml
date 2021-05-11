@@ -27,10 +27,6 @@ user_domain_name: Default
 # If user is created set accurate rights to use ('_member_' or 'admin')
 role: _member_
 
-# Reuse user pre-existing openrc file or define a new one for NFVbench generator VM (used by NFVbench application)
-openrc_file_name: openrc
-user_openrc_exists: false
-
 # NFVbench generator VM Openstack certificate
 cacert_file_name: ca.pem
 
@@ -40,8 +36,8 @@ images_path: './images/'
 # Images details
 loop_vm_image_name: 'nfvbenchvm-0.13'
 loop_vm_image_filename: nfvbenchvm-0.13.qcow2
-generator_image_name: 'nfvbenchvm-generator-0.14'
-generator_image_filename: nfvbenchvm-generator-0.14.qcow2
+generator_image_name: 'nfvbenchvm-generator-0.13'
+generator_image_filename: nfvbenchvm-generator-0.13.qcow2
 
 # NFVbench scenario (e2e or loopback)
 generator_scenario: e2e

@@ -44,6 +44,37 @@ Before using this ansible role you need to install the Openstack Cloud collectio
 `ansible-galaxy install frmenguy.nfvbench`
 
 
+### Pre-requesites
+
+- This role uses a `clouds.yaml` file for authentication. This file will permit to detect if user has admin rights to Openstack API.
+Example of `clouds.yaml`:
+
+```yaml
+clouds:
+  nfvbench:
+    auth:
+      auth_url: https://127.0.0.1/v3
+      username: nfvbench
+      password: Nfvbench-P@ssw0rd1
+      project_id: 1aa22b333cc44dd55eeeee6666fffff
+      project_name: nfvbench
+      project_domain_name: default
+      user_domain_name: Default
+    cacert: ca.pem
+    region_name: "RegionOne"
+    interface: "public"
+    identity_api_version: 3
+```
+
+`Note: Please add this file in the same path as the Ansible playbook file` 
+
+- A certificate can be used for accessing to Openstack API. Please specify `cacert` property in `clouds.yaml` file.
+
+`Note: Please add this certificate file in the same path as the Ansible playbook file` 
+
+- Openstack images are required for NFVbench deployment. These images can be uploaded to Openstack using this role. In this case, replace `image_path` property value in the `default/main.yml` with the accurate path.
+
+
 ### Playbooks
 
 To use this role, please reference the full name of Ansible role, collection name, and module name that you want to use:
