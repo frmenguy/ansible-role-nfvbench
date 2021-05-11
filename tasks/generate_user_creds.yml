@@ -1,28 +1,16 @@
 ---
+- name: Check if clouds.yaml file exists
+  stat:
+    path: "clouds.yaml"
+  register: clouds_result
+  no_log: true
+
 - name: Extract clouds.yaml vars
   set_fact:
     cloud_data: "{{ lookup('file', 'clouds.yaml') | from_yaml  }}"
   no_log: true
 
-- name: Check if openrc file exists
-  stat:
-    path: "{{ openrc_file_name }}"
-  register: openrc_result
-  no_log: true
-
-- name: Check if requested user is specify in openrc file
-  set_fact:
-    user_openrc_exists: "{{ username == lookup('file', openrc_file_name) | regex_search('(?<=OS_USERNAME=).*', multiline=True) | trim  }}"
-  when:
-    - openrc_result.stat.exists
-
-- name: Extract project info from openrc file
-  set_fact:
-    project_id: "{{ lookup('file', openrc_file_name) | regex_search('(?<=OS_PROJECT_ID=).*', multiline=True) | trim }}"
-  when:
-    - user_openrc_exists
-
-- name: get project info
+- name: Get project info from openstack API
   openstack.cloud.project_info:
     cloud: "{{ cloud_detail }}"
     name: "{{ project_name }}"
@@ -32,7 +20,7 @@
     - not deploy
     - project_id is not defined
 
-- name: Extract project info
+- name: Extract project id from openstack API
   set_fact:
     project_id: "{{ openstack_project_info.openstack_projects[0].id }}"
   when:
@@ -40,7 +28,14 @@
     - not deploy
     - project_id is not defined
 
-- name: Set openrc variables
+- name: Extract project_id from clouds.yaml
+  set_fact:
+    project_id: "{{ cloud_data.clouds[cloud_detail].auth.project_id }}"
+  when:
+    - not admin
+    - project_id is not defined
+
+- name: Set openrc variables from clouds.yaml file
   set_fact:
     OS_AUTH_URL: "{{ cloud_data.clouds[cloud_detail].auth.auth_url }}"
     OS_PROJECT_ID: "{{ project_id }}"
@@ -51,21 +46,21 @@
     OS_REGION_NAME: "{{ cloud_data.clouds[cloud_detail].region_name }}"
     OS_PROJECT_DOMAIN_NAME: "{{ project_domain_name }}"
   no_log: true
+
 - name: Set CACERT env variable
   set_fact:
     OS_CACERT: "{{ cloud_data.clouds[cloud_detail].cacert }}"
   ignore_errors: true
   no_log: true
 
-- name: Create openrc file for the user
+- name: Create openrc file for NFVbench generator VM
   template:
     src: openrc.j2
-    dest: '{{ openrc_file_name }}'
+    dest: 'openrc'
     mode: '0644'
-  when: not user_openrc_exists
   no_log: true
 
-- name: Create clouds.yaml file for the new user
+- name: Create clouds-user.yaml file for non admin rights
   template:
     src: clouds.yaml.j2
     dest: clouds-user.yaml

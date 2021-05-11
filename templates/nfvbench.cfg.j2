@@ -1,6 +1,4 @@
-{% if openrc_file_name is defined %}
 openrc_file: '/etc/nfvbench/openrc'
-{% endif %}
 
 {% for nfvbkey in nfvbench_config %}
 {% if nfvbkey == "traffic_generator" %}
