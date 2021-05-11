@@ -2,13 +2,12 @@
 - name: Create the management tenant network for generator
   openstack.cloud.network:
     state: present
-    cloud: "{{ cloud_detail }}"
+    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
     name: "{{ item.network_name }}"
     project: "{{ project_id }}"
     external: "{{ item.external }}"
     shared: "{{ item.shared }}"
   when:
-    - admin
     - item.physical_network is not defined
 
 - name: Create the management network for generator
