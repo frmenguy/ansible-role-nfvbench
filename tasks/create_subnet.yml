@@ -1,7 +1,7 @@
 ---
 - name: Get the subnet info for {{ item.subnet_name }}
   openstack.cloud.subnets_info:
-    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
+    cloud: "{{ cloud_detail }}"
     name: "{{ item.subnet_name }}"
     validate_certs: "{{ validate_certs }}"
   register: subnet_info
@@ -14,7 +14,7 @@
 - name: Create the subnet {{ item.subnet_name }}
   openstack.cloud.subnet:
     state: present
-    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
+    cloud: "{{ cloud_detail }}"
     name: "{{ item.subnet_name }}"
     network_name: "{{ item.network_name }}"
     gateway_ip: "{{ item.gateway }}"
@@ -24,12 +24,13 @@
     no_gateway_ip: "{{ item.no_gateway_ip }}"
     validate_certs: "{{ validate_certs }}"
   when:
+    - admin
     - subnet_info.openstack_subnets | length == 0
   register: subnet
 # Get info after creation to save subnet id
 - name: Get the subnet info for {{ item.subnet_name }}
   openstack.cloud.subnets_info:
-    cloud: "{{ lookup('file', 'clouds-user.yaml') | from_yaml }}"
+    cloud: "{{ cloud_detail }}"
     name: "{{ item.subnet_name }}"
   register: subnet_info
   when:
