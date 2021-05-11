@@ -44,7 +44,7 @@ Before using this ansible role you need to install the Openstack Cloud collectio
 `ansible-galaxy install frmenguy.nfvbench`
 
 
-### Pre-requesites
+### Prerequisites
 
 - This role uses a `clouds.yaml` file for authentication. This file will permit to detect if user has admin rights to Openstack API.
 Example of `clouds.yaml`:
