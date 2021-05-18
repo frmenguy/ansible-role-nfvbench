@@ -24,7 +24,7 @@
     no_gateway_ip: "{{ item.no_gateway_ip }}"
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
+    - admin | bool
     - subnet_info.openstack_subnets | length == 0
   register: subnet
 # Get info after creation to save subnet id

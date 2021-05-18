@@ -11,7 +11,7 @@
     external: "{{ item.external }}"
     shared: "{{ item.shared }}"
   when:
-    - admin
+    - admin | bool
     - item.segmentation_id is defined
   register: network
 
@@ -20,7 +20,7 @@
   set_fact:
     loopback_vlans: "{{ loopback_vlans | default([]) + [network.network['provider:segmentation_id'],network.network['provider:segmentation_id']] }}"
   when:
-    - admin
+    - admin | bool
     - loopback_vlans is not defined
     - not item.segmentation_id
 
@@ -35,7 +35,7 @@
   set_fact:
     e2e_vlans: "{{ e2e_vlans | default([]) + [network.network['provider:segmentation_id']] }}"
   when:
-    - admin
+    - admin | bool
     - item.topology is defined
     - item.topology == 'e2e' or item.topology == 'loopback_e2e'
     - not item.segmentation_id

@@ -16,23 +16,23 @@
     name: "{{ project_name }}"
   register: openstack_project_info
   when:
-    - admin
-    - not deploy
+    - admin | bool
+    - not deploy | bool
     - project_id is not defined
 
 - name: Extract project id from openstack API
   set_fact:
     project_id: "{{ openstack_project_info.openstack_projects[0].id }}"
   when:
-    - admin
-    - not deploy
+    - admin | bool
+    - not deploy | bool
     - project_id is not defined
 
 - name: Extract project_id from clouds.yaml
   set_fact:
     project_id: "{{ cloud_data.clouds[cloud_detail].auth.project_id }}"
   when:
-    - not admin
+    - not admin | bool
     - project_id is not defined
 
 - name: Set openrc variables from clouds.yaml file

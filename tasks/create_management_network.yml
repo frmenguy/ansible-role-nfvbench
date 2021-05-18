@@ -9,7 +9,7 @@
     shared: "{{ item.shared }}"
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
+    - admin | bool
     - item.physical_network is not defined
 
 - name: Create the management network for generator
@@ -25,5 +25,5 @@
     shared: "{{ item.shared }}"
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
+    - admin | bool
     - item.physical_network is defined

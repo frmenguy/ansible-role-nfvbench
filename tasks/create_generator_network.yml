@@ -8,7 +8,7 @@
     external: "{{ item.0.external }}"
     shared: "{{ item.0.shared }}"
   when:
-    - admin
+    - admin | bool
     - item.0.network_name is defined
     - item.0.physical_network is not defined
 
@@ -24,6 +24,6 @@
     external: "{{ item.0.external }}"
     shared: "{{ item.0.shared }}"
   when:
-    - admin
+    - admin | bool
     - item.0.network_name is defined
     - item.0.physical_network is defined

@@ -101,7 +101,7 @@
     - "{{ loop_vm_networks }}"
     - "{{ management_networks }}"
   when:
-    - admin
+    - admin | bool
     - item.cleanup is defined
     - item.cleanup|bool
 
@@ -122,7 +122,7 @@
     name: "{{ item.flavor_name }}"
     validate_certs: "{{ validate_certs }}"
   with_items: "{{ flavors }}"
-  when: admin
+  when: admin | bool
 
 - name: Get generator image info
   openstack.cloud.image_info:
@@ -138,7 +138,7 @@
     state: absent
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
+    - admin | bool
     - generator_image.openstack_image.owner == project_id
 
 - name: Get loopvm image info
@@ -155,7 +155,7 @@
     state: absent
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
+    - admin | bool
     - loop_vm_image.openstack_image.owner == project_id
 
 - name: Delete NFVbench project
@@ -166,8 +166,8 @@
     domain_id: "{{ project_domain_name }}"
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
-    - tenant_creation
+    - admin | bool
+    - tenant_creation | bool
 
 - name: Delete user
   openstack.cloud.identity_user:
@@ -177,5 +177,5 @@
     domain: "{{ user_domain_name }}"
     validate_certs: "{{ validate_certs }}"
   when:
-    - admin
-    - user_creation
+    - admin | bool
+    - user_creation | bool

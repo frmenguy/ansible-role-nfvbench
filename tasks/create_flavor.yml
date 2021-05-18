@@ -9,4 +9,4 @@
     disk: "{{ item.flavor_disk }}"
     extra_specs:
       "{{ item.flavor_extra_specs }}"
-  when: admin
+  when: admin | bool

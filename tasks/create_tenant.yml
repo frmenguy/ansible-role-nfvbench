@@ -9,14 +9,14 @@
     enabled: True
   register: project_info
   when:
-    - admin
-    - tenant_creation
+    - admin | bool
+    - tenant_creation | bool
 
 - name: Extract project info
   set_fact:
     project_id: "{{ project_info.project.id }}"
   when:
-    - admin
+    - admin | bool
     - project_info is defined
 
 - name: Create user
@@ -29,8 +29,8 @@
     domain: "{{ user_domain_name }}"
     default_project: "{{ project_name }}"
   when:
-    - admin
-    - user_creation
+    - admin | bool
+    - user_creation | bool
 
 - name: Add user role to project
   openstack.cloud.role_assignment:
@@ -39,5 +39,5 @@
     role: "{{ role }}"
     project: "{{ project_name }}"
   when:
-    - admin
-    - tenant_creation
+    - admin | bool
+    - tenant_creation | bool
