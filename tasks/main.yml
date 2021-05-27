@@ -1,7 +1,21 @@
 ---
 - name: Run NFVbench role
   block:
-    - name: Check if extra vars file exists
+    - name: Check if a NFVbench template vars file exists
+      stat:
+        path: "{{ lookup('env', 'extra_vars') }}.j2"
+      register: extra_vars_template
+      ignore_errors: true
+      no_log: true
+    - name: Create NFVbench vars file
+      template:
+        src: "{{ lookup('env', 'extra_vars') }}.j2"
+        dest: "{{ lookup('env', 'extra_vars') }}"
+        mode: '0644'
+      when:
+        - extra_vars_template.stat.exists
+      no_log: true
+    - name: Check if NFVbench vars file exists
       stat:
         path: "{{ lookup('env', 'extra_vars') }}"
       register: extra_vars
