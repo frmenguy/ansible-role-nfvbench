@@ -1,6 +1,10 @@
 ---
 - name: Run NFVbench role
   block:
+    - name: Register NFVbench VNIC type from env
+      set_fact:
+        nfvbench_network_vnic_type: "{{ lookup('env', 'NFVBENCH_NETWORK_VNIC_TYPE') | default('direct', True) }}"
+
     - name: Check if a NFVbench template vars file exists
       stat:
         path: "{{ lookup('env', 'extra_vars') }}.j2"
