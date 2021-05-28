@@ -35,9 +35,9 @@ cacert_file_name: ca.pem
 images_path: './images/'
 # Images details
 loop_vm_image_name: 'nfvbenchvm-0.13'
-loop_vm_image_filename: nfvbenchvm-0.13.qcow2
+loop_vm_image_filename: nfvbenchvm_centos-0.13.qcow2
 generator_image_name: 'nfvbenchvm-generator-0.13'
-generator_image_filename: nfvbenchvm-generator-0.13.qcow2
+generator_image_filename: nfvbenchvm_centos-generator-0.13.qcow2
 
 # NFVbench scenario (e2e or loopback)
 generator_scenario: e2e
@@ -186,8 +186,11 @@ generator_vm:
 # NFVbench config part, override NFVbench default configuration (see NFVbench code for more information)
 nfvbench_config:
   traffic_generator:
-    # IP addresses of the generated traffic
+    # IP addresses and UDP ports of the generated traffic (permit to reach 1 million flows per port)
     ip_addrs: ['198.18.0.0/16', '198.19.0.0/16']
+    udp_src_port: ['49152', '49168']
+    udp_dst_port: ['49152', '49168']
+
     tg_gateway_ip_addrs: ['192.168.91.1', '192.168.92.2']
     # First router interco IP addresses
     gateway_ip_addrs: ['192.168.91.2', '192.168.92.2']
