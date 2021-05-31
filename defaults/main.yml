@@ -23,7 +23,7 @@ project_desc:
 project_domain_name: default
 username: nfvbench
 password: Nfvbench-P@ssw0rd1
-user_domain_name: Default
+user_domain_name: default
 # If user is created set accurate rights to use ('_member_' or 'admin')
 role: _member_
 
@@ -207,7 +207,7 @@ nfvbench_config:
   num_mbufs: 128000
   service_chain_shared_net: 'true'
   vlan_tagging: 'false'
-  vm_image_file: '[[ loop_vm_image_filename ]]'
+  vm_image_file: '[[ loop_vm_image_name ]].qcow2'
   loop_vm_name: nfvbench-loop-vm
   availability_zone: 'nova'
   hypervisor_hostname: 'localdomain'
