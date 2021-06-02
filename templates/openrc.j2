@@ -14,7 +14,7 @@ unset OS_TENANT_NAME
 # In addition to the owning entity (tenant), OpenStack stores the entity
 # performing the action as the **user**.
 export OS_USERNAME={{ OS_USERNAME }}
-export OS_PASSWORD='{{ OS_PASSWORD }}'
+export OS_PASSWORD={{ OS_PASSWORD }}
 
 {% if OS_REGION_NAME is defined %}
 export OS_REGION_NAME={{ OS_REGION_NAME }}

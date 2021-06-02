@@ -190,10 +190,10 @@ nfvbench_config:
     ip_addrs: ['198.18.0.0/16', '198.19.0.0/16']
     udp_src_port: ['49152', '49168']
     udp_dst_port: ['49152', '49168']
+    
+    tg_gateway_ip_addrs: ['192.168.40.100', '192.168.41.100']
+    gateway_ip_addrs: ['192.168.40.254', '192.168.41.254']
 
-    tg_gateway_ip_addrs: ['192.168.91.1', '192.168.92.2']
-    # First router interco IP addresses
-    gateway_ip_addrs: ['192.168.91.2', '192.168.92.2']
     generator_profile:
       - name: trex-local
         tool: TRex
