@@ -35,7 +35,7 @@
     - not admin | bool
     - project_id is not defined
 
-- name: Set openrc variables from clouds.yaml file
+- name: Set openstack variables as Ansible facts from clouds.yaml file
   set_fact:
     OS_AUTH_URL: "{{ cloud_data.clouds[cloud_detail].auth.auth_url }}"
     OS_PROJECT_ID: "{{ project_id }}"
@@ -47,20 +47,20 @@
     OS_PROJECT_DOMAIN_NAME: "{{ project_domain_name }}"
   no_log: true
 
+- name: Generate clouds.yaml file for NFVbench generator VM
+  template:
+    src: clouds-nfvbench.yaml.j2
+    dest: clouds-nfvbench.yaml
+    mode: '0644'
+  no_log: true
+
 - name: Set CACERT env variable
   set_fact:
     OS_CACERT: "{{ cloud_data.clouds[cloud_detail].cacert }}"
   ignore_errors: true
   no_log: true
 
-- name: Create openrc file for NFVbench generator VM
-  template:
-    src: openrc.j2
-    dest: 'openrc'
-    mode: '0644'
-  no_log: true
-
-- name: Create clouds-user.yaml file for non admin rights
+- name: Generate clouds-user.yaml file for current user
   template:
     src: clouds.yaml.j2
     dest: clouds-user.yaml

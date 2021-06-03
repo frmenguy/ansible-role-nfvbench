@@ -75,8 +75,7 @@
           echo {% endraw -%}{{ lookup('file', 'loopback.cfg')  | quote }}{%- raw -%} >> /etc/nfvbench/loopback.cfg
           echo {% endraw -%}{{ lookup('file', 'e2e.cfg')  | quote }}{%- raw -%} >> /etc/nfvbench/e2e.cfg
           echo "{% endraw -%}{{ lookup('file', cacert_file_name) }}{%- raw -%}" >> /etc/nfvbench/cacert.pem
-          echo "{% endraw -%}{{ lookup('file', 'openrc') | b64encode }}{%- raw -%}" >> /etc/nfvbench/openrc_encoded
-          base64 -d /etc/nfvbench/openrc_encoded > /etc/nfvbench/openrc
+          echo "{% endraw -%}{{ lookup('file', 'clouds-nfvbench.yaml') | b64encode }}{%- raw -%}" >> /etc/openstack/clouds.yaml
           /etc/rc.local
       {% endraw %}
     validate_certs: "{{ validate_certs }}"
